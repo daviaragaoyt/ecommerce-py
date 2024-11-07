@@ -191,4 +191,4 @@ def checkout():
 if __name__=="__main__":
  app.run(debug=True) 
 
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["*"])
