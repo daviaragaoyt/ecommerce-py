@@ -61,7 +61,7 @@ def logout():
 
 #Rota para criar ou add o produto
 @app.route('/api/products/add', methods=["POST"])
-@login_required
+
 def add_produto():
    data=request.json
    if 'name' in data and 'price' in data:
@@ -158,7 +158,7 @@ def remove_from_cart(product_id):
    return jsonify({'message:':'Error ao retirar item do carrinho'}), 400
 
 
-@app.route('/api/cart',methods=['GET'])
+@app.route('/api/cart',methods=["GET"])
 @login_required
 def view_cart():
    user=User.query.get(int(current_user.id))
@@ -189,3 +189,5 @@ def checkout():
 
 if __name__=="__main__":
  app.run(debug=True) 
+
+CORS(app, origins=["http://localhost:3000"])
