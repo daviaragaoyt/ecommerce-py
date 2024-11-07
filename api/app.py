@@ -73,7 +73,7 @@ def add_produto():
 
 
 #Rota de deletar produto
-@app.route('/api/products/delete/<int:product_id>', methods=['DELETE'])
+@app.route('/api/products/delete/<int:product_id>', methods=["DELETE"])
 @login_required
 def delete_product(product_id):
    product=Product.query.get(product_id)
@@ -85,7 +85,7 @@ def delete_product(product_id):
 
 
 #Rota para buscar produto especifico
-@app.route('/api/products/<int:product_id>', methods=['GET'])
+@app.route('/api/products/<int:product_id>', methods=["GET"])
 def get_product_details(product_id):
     product=Product.query.get(product_id)
     if product:
@@ -98,7 +98,7 @@ def get_product_details(product_id):
     return jsonify({"message:":"Product not found"}),404
 
 #Rota para atualizar produto 
-@app.route('/api/products/update/<int:product_id>', methods=['PUT'])
+@app.route('/api/products/update/<int:product_id>', methods=["PUT"])
 @login_required
 def update_product(product_id):
     product=Product.query.get(product_id)
@@ -118,7 +118,7 @@ def update_product(product_id):
     db.session.commit()
     return jsonify({'message:': 'Product updated sucessfully'})
 
-@app.route('/api/products', methods=['GET'])
+@app.route('/api/products', methods=["GET"])
 def get_products():
    products=Product.query.all()
    product_list=[]
