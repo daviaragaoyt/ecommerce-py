@@ -61,7 +61,7 @@ def logout():
 
 #Rota para criar ou add o produto
 @app.route('/api/products/add', methods=["POST"])
-
+@login_required
 def add_produto():
    data=request.json
    if 'name' in data and 'price' in data:
@@ -89,7 +89,7 @@ def delete_product(product_id):
 def get_product_details(product_id):
     product=Product.query.get(product_id)
     if product:
-        return jsonify({
+        return jsonify({''
             "id:":product_id,
             "name:":product.name,
             "price:":product.price,
@@ -178,7 +178,9 @@ def view_cart():
    return jsonify(cart_content)
 
 
-@app.route('/api/cart/checkout',methods=["POST"])
+@app.route('/api/cart/checkout',methods=["POST"]) 
+
+
 @login_required
 def checkout():
    user=User.query.get(int(current_user.id))
