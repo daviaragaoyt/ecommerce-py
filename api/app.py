@@ -56,7 +56,7 @@ def login():
 @login_required
 def logout():
    logout_user()
-   return jsonify({'message:':'Logout in successfully'}),200
+   return jsonify({'message':'Logout in successfully'}),200
 
 
 #Rota para criar ou add o produto
@@ -90,12 +90,12 @@ def get_product_details(product_id):
     product=Product.query.get(product_id)
     if product:
         return jsonify({''
-            "id:":product_id,
-            "name:":product.name,
-            "price:":product.price,
-            "description:":product.description
+            "id":product_id,
+            "name":product.name,
+            "price":product.price,
+            "description":product.description
         })
-    return jsonify({"message:":"Product not found"}),404
+    return jsonify({"message":"Product not found"}),404
 
 #Rota para atualizar produto 
 @app.route('/api/products/update/<int:product_id>', methods=["PUT"])
@@ -103,7 +103,7 @@ def get_product_details(product_id):
 def update_product(product_id):
     product=Product.query.get(product_id)
     if not product:
-        return jsonify({"message:":"Product not found"}),404
+        return jsonify({"message:""Product not found"}),404
     
     data=request.json
     if 'name' in data:
@@ -116,7 +116,7 @@ def update_product(product_id):
      product.description=data['description']
      
     db.session.commit()
-    return jsonify({'message:': 'Product updated sucessfully'})
+    return jsonify({'message':'Product updated sucessfully'})
 
 @app.route('/api/products', methods=["GET"])
 def get_products():
@@ -124,9 +124,9 @@ def get_products():
    product_list=[]
    for product in products:
       product_data={
-          "id:":product.id,
-            "name:":product.name,
-            "price:":product.price,
+          "id":product.id,
+            "name":product.name,
+            "price":product.price,
             "description":product.description
       }
       product_list.append(product_data)
@@ -145,8 +145,8 @@ def add_to_cart(product_id):
       cart_item= CartItem(user_id=user.id, product_id=product.id)
       db.session.add(cart_item)
       db.session.commit()
-      return jsonify({'message:': 'Item adicionado ao Carrinho'})
-   return jsonify({'message:': 'Falha ao Adicionar item ao carrinho'}), 400
+      return jsonify({'message':'Item adicionado ao Carrinho'})
+   return jsonify({'message':'Falha ao Adicionar item ao carrinho'}), 400
 
 @app.route('/api/cart/remove/<int:product_id>',methods=["DELETE"])
 @login_required
@@ -155,8 +155,8 @@ def remove_from_cart(product_id):
    if cart_item:
       db.session.delete(cart_item)
       db.session.commit()
-      return jsonify({'message:': 'Item removido do carrinho com sucesso'})
-   return jsonify({'message:':'Error ao retirar item do carrinho'}), 400
+      return jsonify({'message':'Item removido do carrinho com sucesso'})
+   return jsonify({'message':'Error ao retirar item do carrinho'}), 400
 
 
 @app.route('/api/cart',methods=["GET"])
@@ -188,9 +188,9 @@ def checkout():
    for cart_item in cart_items:
        db.session.delete(cart_item)
        db.session.commit()
-   return jsonify({'message': 'Compra realiazada com sucesso'})
+   return jsonify({'message':'Compra realiazada com sucesso'})
 
 if __name__=="__main__":
  app.run(debug=True) 
 
-CORS(app, origins=["*"])
+
