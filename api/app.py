@@ -27,7 +27,7 @@ class Product(db.Model):
     name = db.Column(db.String(120), nullable=False)
     price = db.Column(db.Float, nullable=False)
     description = db.Column(db.Text, nullable=True)
-    image_url = db.Column(db.String(200), nullable=True)  # Campo para a URL da imagem
+    image_base64 = db.Column(db.Text, nullable=True) 
 
 class CartItem(db.Model):
    id = db.Column(db.Integer,primary_key=True)
@@ -60,24 +60,21 @@ def logout():
    return jsonify({'message:':'Logout in successfully'}),200
 
 
-#Rota para criar ou add o produto
 @app.route('/api/products/add', methods=["POST"])
-@login_required
+
 def add_produto():
     data = request.json
     if 'name' in data and 'price' in data:
         product = Product(
-            name=data["name"],
+            name=data["name"],                                                                  
             price=data["price"],
             description=data.get("description", ""),
-            image_url=data.get("image_url", "")  # Adicionando o campo da imagem
+            image_base64=data.get("image_base64", "")  # Adicionando a imagem Base64
         )
         db.session.add(product)
         db.session.commit()
         return jsonify({'message': "Produto cadastrado"})
     return jsonify({'message': 'Produto com dados inválidos!'}), 400
-
-
 
 #Rota de deletar produto
 @app.route('/api/products/delete/<int:product_id>', methods=["DELETE"])
@@ -101,18 +98,17 @@ def get_product_details(product_id):
             "name": product.name,
             "price": product.price,
             "description": product.description,
-            "image_url": product.image_url  # Incluindo a imagem
+            "image_base64": product.image_base64  # Incluindo a imagem
         })
     return jsonify({"message": "Product not found"}), 404
 
 
-#Rota para atualizar produto 
 @app.route('/api/products/update/<int:product_id>', methods=["PUT"])
 @login_required
 def update_product(product_id):
     product = Product.query.get(product_id)
     if not product:
-        return jsonify({"message": "Product not found"}), 404
+        return jsonify({"message": "Produto não encontrado"}), 404
     data = request.json
     if 'name' in data:
         product.name = data['name']
@@ -120,11 +116,10 @@ def update_product(product_id):
         product.price = data['price']
     if 'description' in data:
         product.description = data['description']
-    if 'image_url' in data:  # Atualizar o campo de imagem
-        product.image_url = data['image_url']
+    if 'image_base64' in data:  # Atualizar a imagem Base64
+        product.image_base64 = data['image_base64']
     db.session.commit()
-    return jsonify({'message': 'Product updated successfully'})
-
+    return jsonify({'message': 'Produto atualizado com sucesso!'})
 
 @app.route('/api/products', methods=["GET"])
 def get_products():
@@ -136,13 +131,10 @@ def get_products():
             "name": product.name,
             "price": product.price,
             "description": product.description,
-            "image_url": product.image_url  # Incluindo imagem na lista de produtos
+            "image_base64": product.image_base64  # Incluindo a imagem
         }
         product_list.append(product_data)
-
-    return jsonify(product_list)
-
-
+    return jsonify(product_list) 
 #Checkout
 
 @app.route('/api/cart/add/<int:product_id>',methods=["POST"])
