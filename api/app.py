@@ -61,7 +61,7 @@ def logout():
 
 
 @app.route('/api/products/add', methods=["POST"])
-
+# @login_required
 def add_produto():
     data = request.json
     if 'name' in data and 'price' in data:
@@ -78,7 +78,7 @@ def add_produto():
 
 #Rota de deletar produto
 @app.route('/api/products/delete/<int:product_id>', methods=["DELETE"])
-@login_required
+# @login_required
 def delete_product(product_id):
    product=Product.query.get(product_id)
    if product:
@@ -104,7 +104,7 @@ def get_product_details(product_id):
 
 
 @app.route('/api/products/update/<int:product_id>', methods=["PUT"])
-@login_required
+# @login_required
 def update_product(product_id):
     product = Product.query.get(product_id)
     if not product:
@@ -122,6 +122,7 @@ def update_product(product_id):
     return jsonify({'message': 'Produto atualizado com sucesso!'})
 
 @app.route('/api/products', methods=["GET"])
+
 def get_products():
     products = Product.query.all()
     product_list = []
@@ -138,7 +139,7 @@ def get_products():
 #Checkout
 
 @app.route('/api/cart/add/<int:product_id>',methods=["POST"])
-@login_required
+# @login_required
 def add_to_cart(product_id):
    user=User.query.get(int(current_user.id))
    product=Product.query.get(product_id)
@@ -151,7 +152,7 @@ def add_to_cart(product_id):
    return jsonify({'message:': 'Falha ao Adicionar item ao carrinho'}), 400
 
 @app.route('/api/cart/remove/<int:product_id>',methods=["DELETE"])
-@login_required
+# @login_required
 def remove_from_cart(product_id):
    cart_item=CartItem.query.filter_by(user_id=current_user.id, product_id=product_id).first()
    if cart_item:
@@ -162,7 +163,7 @@ def remove_from_cart(product_id):
 
 
 @app.route('/api/cart',methods=["GET"])
-@login_required
+# @login_required
 def view_cart():
    user=User.query.get(int(current_user.id))
    cart_items=user.cart
@@ -179,11 +180,8 @@ def view_cart():
          })
    return jsonify(cart_content)
 
-
 @app.route('/api/cart/checkout',methods=["POST"]) 
-
-
-@login_required
+# @login_required
 def checkout():
    user=User.query.get(int(current_user.id))
    cart_items=user.cart
